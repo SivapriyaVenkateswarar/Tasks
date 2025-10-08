@@ -1,19 +1,10 @@
-// services.js
-const { HumanMessage } = require('@langchain/core/messages');
-const { getProvider } = require('./providers/commonProvider');
+import { HumanMessage } from "@langchain/core/messages";
+import { getProvider } from "./providers/commonProvider.js";
 
-/**
- * Process an email using the selected LLM (OpenAI or Gemini)
- * and return structured data: name, mailFrom, summary
- * @param {Object} options
- * @param {string} options.model - "openai" or "gemini"
- * @param {string} options.text - full email text
- * @returns {Object} { name, mailFrom, summary }
- */
-async function processEmailWithAI({ model, text }) {
+export async function processEmailWithAI({ model, text }) {
   const llm = getProvider(model);
 
-  const emailExtractionPrompt = `
+  const prompt = `
 Extract the sender's name and email, and provide a concise one-to-two sentence summary of this email.
 Return the result as JSON in this format:
 {
@@ -25,14 +16,19 @@ Email:
 ${text}
 `;
 
-  const response = await llm.invoke([new HumanMessage(emailExtractionPrompt)]);
+  const response = await llm.invoke([new HumanMessage(prompt)]);
   const content = response.content || response.response?.text();
 
+  // --- START FIX ---
+  const cleaned = content
+    .replace(/^```json\s*/, '') // remove starting ```json
+    .replace(/```$/, '')         // remove ending ```
+    .trim();
+  // --- END FIX ---
+
   try {
-    return JSON.parse(content);
+    return JSON.parse(cleaned);
   } catch (err) {
     throw new Error(`LLM response is not valid JSON: ${content}`);
   }
 }
-
-module.exports = { processEmailWithAI };

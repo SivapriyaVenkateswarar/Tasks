@@ -1,7 +1,8 @@
-const express = require('express');
-const { handleEmailExtraction } = require('./controller');
+import express from "express";
+import { handleEmailExtraction } from "./controller.js";
+
 const router = express.Router();
 
-router.post('/extract-email-details', handleEmailExtraction);
+router.post("/extract-email-details", handleEmailExtraction);
 
-module.exports = router;
+export default router;

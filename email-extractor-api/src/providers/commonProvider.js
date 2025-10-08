@@ -1,15 +1,13 @@
-const openaiProvider = require("./openaiProvider");
-const geminiProvider = require("./geminiProvider");
+import openaiProvider from "./openaiProvider.js";
+import geminiProvider from "./geminiProvider.js";
 
-function getProvider(modelName) {
+export function getProvider(modelName) {
   switch (modelName) {
     case "openai":
       return openaiProvider;
     case "gemini":
       return geminiProvider;
     default:
-      throw new Error("Unsupported model provider");
+      throw new Error("Unsupported model provider. Use 'openai' or 'gemini'.");
   }
 }
-
-module.exports = { getProvider };
