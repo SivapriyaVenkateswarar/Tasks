@@ -1,7 +1,7 @@
 // src/service-tester.js
-require('dotenv').config();
-const { HumanMessage } = require('@langchain/core/messages');
-const { getProvider } = require('./providers/commonProvider');
+import 'dotenv/config';
+import { HumanMessage } from '@langchain/core/messages';
+import { getProvider } from './providers/commonProvider.js';
 
 async function testOpenAI() {
   try {
@@ -19,7 +19,8 @@ Hi team, the Q4 revenue exceeded our projections. Please review the attached rep
       ),
     ]);
 
-    console.log('OpenAI Test Result:', response.content);
+    const content = response.content || response.response?.text();
+    console.log('OpenAI Test Result:', content);
   } catch (err) {
     console.error('Error testing OpenAI:', err);
   }

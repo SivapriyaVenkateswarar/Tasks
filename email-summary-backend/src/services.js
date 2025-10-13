@@ -19,12 +19,10 @@ ${text}
   const response = await llm.invoke([new HumanMessage(prompt)]);
   const content = response.content || response.response?.text();
 
-  // --- START FIX ---
   const cleaned = content
-    .replace(/^```json\s*/, '') // remove starting ```json
-    .replace(/```$/, '')         // remove ending ```
+    .replace(/^```json\s*/, '') 
+    .replace(/```$/, '')         
     .trim();
-  // --- END FIX ---
 
   try {
     return JSON.parse(cleaned);

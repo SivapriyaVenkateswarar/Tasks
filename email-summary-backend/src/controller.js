@@ -1,6 +1,9 @@
 import { processEmailWithAI } from './services.js';
 
+
 export async function handleEmailExtraction(req, res) {
+  console.log("Request hit controller:", req.body);
+
   try {
     const { model, text } = req.body;
 
